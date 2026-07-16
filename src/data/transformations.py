@@ -13,6 +13,5 @@ def add_time_dimensions(df: pd.DataFrame) -> pd.DataFrame:
     data["Número de día de la semana"] = dates.dt.dayofweek
     data["Día de la semana"] = pd.Categorical(dates.dt.dayofweek.map(lambda x: DAYS[int(x)] if pd.notna(x) else None), categories=DAYS, ordered=True)
     data["Trimestre"] = dates.dt.quarter
-    data["Semestre"] = dates.dt.month.map(lambda x: "Enero - Junio" if pd.notna(x) and x <= 6 else ("Julio - Diciembre" if pd.notna(x) else None))
     if "datetime" in data: data["Hora"] = pd.to_datetime(data["datetime"], errors="coerce").dt.hour
     return data

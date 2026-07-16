@@ -8,7 +8,7 @@ Las carpetas dentro de `data/raw/` se detectan dinámicamente; se admiten CSV y 
 
 Los KPIs de **pedidos / servicio de entrega** tienen una fuente distinta y autoritativa: `Ventas_a_Domicilio`. Su parser extrae el total de cuentas, importe total y, de cada concepto de canal, el número de pedidos y su importe. No usa filas agregadas de `Ventas` para sustituir estas cifras. La validación actual da 10,161 cuentas en Zibatá, 8,963 en El Refugio y 19,124 en conjunto.
 
-Los IDs actuales incluyen registros agregados diarios por tipo de venta; no se usan como pedidos individuales para productos por pedido, horas pico o market basket. `Ventas_Articulos` de Zibatá solo cubre un día, por lo que las comparaciones temporales de detalle se marcan como cobertura desigual. No hay costos: la matriz se llama **Desempeño del menú** y usa popularidad y contribución a ingresos, nunca rentabilidad.
+Los IDs actuales incluyen registros agregados diarios por tipo de venta; no se usan como pedidos individuales para productos por pedido u horas pico. `Ventas_Articulos` de Zibatá solo cubre un día, por lo que las comparaciones temporales de detalle se marcan como cobertura desigual. No hay costos: la matriz se llama **Desempeño del menú** y usa popularidad y contribución a ingresos, nunca rentabilidad.
 
 ## Instalación y ejecución
 
@@ -25,7 +25,7 @@ Los datos procesados quedan en `data/processed/` y los reportes en `output/repor
 
 ## Arquitectura
 
-`src/data` carga, limpia, transforma y valida; `src/metrics` contiene cálculos; `src/insights` produce observaciones descriptivas; `dashboard` presenta resultados. `src/advanced` reserva módulos para estacionalidad, pronóstico y market basket.
+`src/data` carga, limpia, transforma y valida; `src/metrics` contiene cálculos; `src/insights` produce observaciones descriptivas; `dashboard` presenta resultados. `src/advanced` contiene estacionalidad y tendencia lineal.
 
 ## Metodología
 

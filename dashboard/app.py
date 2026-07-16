@@ -13,7 +13,6 @@ from src.metrics.delivery import channel_kpis, delivery_summary, branch_delivery
 from src.metrics.time_analysis import delivery_daily_sales, delivery_monthly_trend
 from src.advanced.seasonality import seasonality
 from src.advanced.forecasting import linear_trend
-from src.advanced.market_basket import basket_diagnostic
 from src.utils.filters import apply_filters
 from src.utils.exports import to_csv_bytes
 from dashboard.components.sidebar import global_filters
@@ -48,6 +47,7 @@ def filtered_products():
     return products
 
 if page=="Resumen Ejecutivo":
+    st.header("¿Cómo estamos actualmente?")
     k=delivery_summary(totals)
     for col,(name,value) in zip(st.columns(3),k.items()): col.metric(name, f"${value:,.2f}" if "Venta" in name or "Ticket" in name else f"{value:,.0f}")
     channels=channel_kpis(delivery)
@@ -101,12 +101,10 @@ elif page=="Desempeño del Menú":
         fig.add_vline(x=matrix["Umbral popularidad"].iloc[0]); fig.add_hline(y=matrix["Umbral contribución"].iloc[0])
         st.plotly_chart(fig,width="stretch"); st.dataframe(matrix,width="stretch")
 else:
-    season,week=seasonality(sales); trend,stats=linear_trend(sales); diagnostic=basket_diagnostic(data["articulos"])
-    sea,forecast,basket=st.tabs(["Estacionalidad","Regresión lineal","Productos que se venden juntos"])
+    season,week=seasonality(sales); trend,stats=linear_trend(sales)
+    sea,forecast=st.tabs(["Estacionalidad","Regresión lineal"])
     with sea:
         st.warning("Un solo ciclo anual es insuficiente para confirmar patrones estacionales recurrentes."); st.dataframe(season,width="stretch"); st.dataframe(week,width="stretch")
     with forecast:
         st.warning("Esta regresión representa una tendencia lineal simple, no un pronóstico financiero definitivo."); st.write(stats)
         if not trend.empty: st.plotly_chart(px.line(trend,x="date",y=["Ventas","Tendencia lineal"]),width="stretch")
-    with basket:
-        st.write(diagnostic); st.info("No existe suficiente detalle transaccional representativo del periodo completo; los IDs diarios agregados se excluyen.")
